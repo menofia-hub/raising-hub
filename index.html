@@ -359,8 +359,8 @@
   </section>
 
   <script>
-    // ⚠️ ضع رابط الـ Web App الخاص بك من Google Apps Script هنا
-    const API_URL = "رابط_الـWEB_APP_الخاص_بك";
+    // ⚠️ استبدل هذا الرابط برابط الـ Web App الخاص بك المأخوذ من Google Apps Script
+    const API_URL = "ضع_رابط_الـWEB_APP_الخاص_بك_هنا";
 
     var localDatabase = [];
     var rawMembersData = [];
@@ -408,10 +408,18 @@
     });
 
     function apiCall(action, callback) {
-      fetch(API_URL + "?action=" + action, { redirect: "follow" })
-        .then(function(res) { return res.json(); })
-        .then(function(data) { callback(null, data); })
-        .catch(function(err) { callback(err, null); });
+      var url = API_URL + "?action=" + action;
+      fetch(url, { redirect: "follow" })
+        .then(function(res) {
+          if (!res.ok) throw new Error("HTTP Status " + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          callback(null, data);
+        })
+        .catch(function(err) {
+          callback(err, null);
+        });
     }
 
     function fetchData() {
