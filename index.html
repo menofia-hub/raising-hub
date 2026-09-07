@@ -534,7 +534,6 @@
   </section>
 
   <script>
-    // ⚠️ استبدل هذا الرابط برابط الـ Deploy الخاص بك من Google Apps Script عند رفعه على GitHub Pages
     var API_URL = "https://script.google.com/macros/s/AKfycbzL5PIsJykSb3dF3ihinangnzb6QFl4VS3RE0ejshYZ_u5LdjjgcDCzICeIBDmGxeZO/exec";
 
     var localDatabase = [];
@@ -576,14 +575,13 @@
       }
     });
 
-    // دالة الاتصال المزدوج الذكية (تعمل سواء على Apps Script أو GitHub Pages)
     function callBackend(actionName, serverFnName, successCb, failCb) {
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(successCb)
           .withFailureHandler(failCb || console.error)
           [serverFnName]();
-      } else if (API_URL && API_URL !== "https://script.google.com/macros/s/AKfycbzL5PIsJykSb3dF3ihinangnzb6QFl4VS3RE0ejshYZ_u5LdjjgcDCzICeIBDmGxeZO/exec") {
+      } else if (API_URL && API_URL.trim() !== "") {
         fetch(API_URL + "?action=" + actionName)
           .then(function(res) { return res.json(); })
           .then(successCb)
@@ -597,6 +595,7 @@
       fetchData();
       fetchLinks();
       fetchDashboardData();
+      setupSearchInput();
     });
 
     function fetchData() {
@@ -611,295 +610,205 @@
         console.error("Fetch failed:", err);
         var status = document.getElementById('statusText');
         if (status) {
-          status.innerText = "Error Loading";
-          status.style.background = "#ef4444";
+          status.innerText = "OFFLINE";
+          status.style.background = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)";
         }
       });
     }
 
     function fetchLinks() {
-      callBackend('getLinks', 'getSheetLinks', function(links) {
-        if (links) {
-          if (links.welad) document.getElementById('btn-welad').href = links.welad;
-          if (links.kat3a) document.getElementById('btn-kat3a').href = links.kat3a;
-          if (links.stars) document.getElementById('btn-stars').href = links.stars;
-          if (links.starks) document.getElementById('btn-starks').href = links.starks;
-        }
+      callBackend('getLinks', 'getSheetsLinks', function(links) {
+        if (!links) return;
+        if (links.welad) document.getElementById('btn-welad').href = links.welad;
+        if (links.kat3a) document.getElementById('btn-kat3a').href = links.kat3a;
+        if (links.stars) document.getElementById('btn-stars').href = links.stars;
+        if (links.starks) document.getElementById('btn-starks').href = links.starks;
       });
     }
 
     function fetchDashboardData() {
-      callBackend('getDashboard', 'getDashboardData', function(data) {
-        if (!data) return;
-
-        if (data.topAchiever) {
-          document.getElementById('dashTopAchiever').innerText = data.topAchiever.name;
-          document.getElementById('dashTopAchieverSlots').innerText = data.topAchiever.slots + " Slots";
-        }
-
-        if (data.topTeam) {
-          document.getElementById('dashTopTeam').innerText = data.topTeam.name;
-          document.getElementById('dashTopTeamSlots').innerText = data.topTeam.slots + " Total Slots";
-        }
-
-        if (data.topFunction) {
-          document.getElementById('dashTopFunc').innerText = data.topFunction.name;
-          document.getElementById('dashTopFuncSlots').innerText = data.topFunction.slots + " Total Slots";
-        }
-
-        rawMembersData = data.members || [];
-        applyLeaderboardFilter();
+      callBackend('getDashboard', 'getDashboardData', function(res) {
+        if (!res || !res.members) return;
+        rawMembersData = res.members;
+        renderDashboard();
       });
     }
 
     function toggleCustomDropdown() {
       var menu = document.getElementById('customFilterMenu');
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
 
-    function selectFilter(val, labelText, imgUrl) {
-      currentFilter = val;
-      var labelContainer = document.getElementById('selectedOptionText');
-      if (imgUrl) {
-        labelContainer.innerHTML = '<img src="' + imgUrl + '" class="aiesec-prog-logo" alt="' + val + '"> ' + labelText;
-      } else {
-        labelContainer.innerText = labelText;
-      }
-      document.getElementById('customFilterMenu').style.display = 'none';
-      applyLeaderboardFilter();
-    }
-
-    window.addEventListener('click', function(e) {
-      var btn = document.getElementById('dropdownBtn');
-      var menu = document.getElementById('customFilterMenu');
-      if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
-        menu.style.display = 'none';
+    document.addEventListener('click', function(e) {
+      var container = document.querySelector('.custom-dropdown-container');
+      if (container && !container.contains(e.target)) {
+        document.getElementById('customFilterMenu').style.display = 'none';
       }
     });
 
-    function animateCounter(elementId, start, end, duration) {
-      var obj = document.getElementById(elementId);
-      if (!obj) return;
-      var range = end - start;
-      if (range === 0) { obj.innerText = end; return; }
-      var startTime = null;
-
-      function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        var progress = Math.min((timestamp - startTime) / duration, 1);
-        obj.innerText = Math.floor(progress * range + start);
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        } else {
-          obj.innerText = end;
-        }
+    function selectFilter(filterKey, filterLabel, logoUrl) {
+      currentFilter = filterKey;
+      var btnText = document.getElementById('selectedOptionText');
+      if (logoUrl) {
+        btnText.innerHTML = '<img src="' + logoUrl + '" class="aiesec-prog-logo" alt=""> ' + filterLabel;
+      } else {
+        btnText.innerHTML = filterLabel;
       }
-      window.requestAnimationFrame(step);
+      document.getElementById('customFilterMenu').style.display = 'none';
+      document.getElementById('floatFilterLabel').innerText = filterKey === 'ALL' ? 'TOTAL SLOTS' : filterKey + ' SLOTS';
+      renderDashboard();
     }
 
-    function applyLeaderboardFilter() {
-      var filter = currentFilter;
-      if (!rawMembersData || rawMembersData.length === 0) {
-        document.getElementById('dashTableBody').innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">No leaderboard records available</td></tr>';
-        return;
-      }
-
-      var grandTotalSlots = 0;
+    function renderDashboard() {
+      if (!rawMembersData || rawMembersData.length === 0) return;
 
       var processed = rawMembersData.map(function(m) {
         var score = 0;
-        if (filter === 'ALL') score = m.total;
-        else if (filter === 'iGV') score = m.igv;
-        else if (filter === 'iGTa') score = m.igta;
-        else if (filter === 'iGTe') score = m.igte;
-
-        grandTotalSlots += score;
-        return { name: m.name, team: m.team, func: m.func, igv: m.igv, igta: m.igta, igte: m.igte, score: score };
+        if (currentFilter === 'ALL') score = (Number(m.iGV)||0) + (Number(m.iGTa)||0) + (Number(m.iGTe)||0);
+        else if (currentFilter === 'iGV') score = Number(m.iGV)||0;
+        else if (currentFilter === 'iGTa') score = Number(m.iGTa)||0;
+        else if (currentFilter === 'iGTe') score = Number(m.iGTe)||0;
+        return { name: m.name, team: m.team, func: m.func, iGV: m.iGV||0, iGTa: m.iGTa||0, iGTe: m.iGTe||0, score: score };
       });
 
-      animateCounter('floatTotalSlots', currentAnimatedSlots, grandTotalSlots, 1000);
-      currentAnimatedSlots = grandTotalSlots;
-      document.getElementById('floatFilterLabel').innerText = (filter === 'ALL') ? "TOTAL SLOTS" : filter + " SLOTS";
+      processed.sort(function(a, b) { return b.score - a.score; });
 
-      processed.sort(function(a, b) {
-        if (b.score !== a.score) {
-          return b.score - a.score;
-        }
-        var aGT = a.igta + a.igte;
-        var bGT = b.igta + b.igte;
-        return bGT - aGT;
-      });
+      var totalSlots = processed.reduce(function(acc, item) { return acc + item.score; }, 0);
+      animateValue('floatTotalSlots', currentAnimatedSlots, totalSlots, 800);
+      currentAnimatedSlots = totalSlots;
 
-      if (processed[0]) {
+      if (processed.length > 0) {
         document.getElementById('dashTopAchiever').innerText = processed[0].name;
-        document.getElementById('dashTopAchieverSlots').innerText = processed[0].score + " Slots (" + filter + ")";
+        document.getElementById('dashTopAchieverSlots').innerText = processed[0].score + " Slots";
       }
 
-      renderPodiumAndTable(processed);
+      var teams = {};
+      var funcs = {};
+      processed.forEach(function(item) {
+        teams[item.team] = (teams[item.team] || 0) + item.score;
+        funcs[item.func] = (funcs[item.func] || 0) + item.score;
+      });
+
+      var topTeamName = "-", topTeamSlots = 0;
+      for (var t in teams) { if (teams[t] > topTeamSlots) { topTeamSlots = teams[t]; topTeamName = t; } }
+      document.getElementById('dashTopTeam').innerText = topTeamName;
+      document.getElementById('dashTopTeamSlots').innerText = topTeamSlots + " Slots";
+
+      var topFuncName = "-", topFuncSlots = 0;
+      for (var f in funcs) { if (funcs[f] > topFuncSlots) { topFuncSlots = funcs[f]; topFuncName = f; } }
+      document.getElementById('dashTopFunc').innerText = topFuncName;
+      document.getElementById('dashTopFuncSlots').innerText = topFuncSlots + " Slots";
+
+      renderPodium(processed.slice(0, 3));
+
+      var tbody = document.getElementById('dashTableBody');
+      tbody.innerHTML = '';
+      processed.forEach(function(item, idx) {
+        var tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+        tr.innerHTML = '<td style="padding:12px; font-weight:800;">#' + (idx + 1) + '</td>' +
+                       '<td style="padding:12px; font-weight:700;">' + item.name + '</td>' +
+                       '<td style="padding:12px; color:var(--text-muted);">' + item.team + '</td>' +
+                       '<td style="padding:12px; color:var(--text-muted);">' + item.func + '</td>' +
+                       '<td style="padding:12px;">' + item.iGV + '</td>' +
+                       '<td style="padding:12px;">' + item.iGTa + '</td>' +
+                       '<td style="padding:12px;">' + item.iGTe + '</td>' +
+                       '<td style="padding:12px; font-weight:800; color:var(--accent-cyan);">' + item.score + '</td>';
+        tbody.appendChild(tr);
+      });
     }
 
-    function renderPodiumAndTable(list) {
-      var podium = document.getElementById('podiumContainer');
-      var tbody = document.getElementById('dashTableBody');
-      podium.innerHTML = '';
-      tbody.innerHTML = '';
+    function renderPodium(top3) {
+      var pod = document.getElementById('podiumContainer');
+      pod.innerHTML = '';
+      if (!top3 || top3.length === 0) return;
 
-      var top3 = list.slice(0, 3);
-      var podiumOrder = [];
-      
-      if (top3[1]) {
-        podiumOrder.push({
-          item: top3[1],
-          rank: 2,
-          height: '130px',
-          gradient: 'linear-gradient(180deg, rgba(226, 232, 240, 0.45) 0%, rgba(148, 163, 184, 0.1) 100%)',
-          borderColor: '#e2e8f0',
-          badgeBg: 'linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)',
-          glow: '0 0 25px rgba(226, 232, 240, 0.3)',
-          badgeColor: '#0f172a'
-        });
-      }
-      
-      if (top3[0]) {
-        podiumOrder.push({
-          item: top3[0],
-          rank: 1,
-          height: '175px',
-          gradient: 'linear-gradient(180deg, rgba(250, 204, 21, 0.5) 0%, rgba(202, 138, 4, 0.1) 100%)',
-          borderColor: '#facc15',
-          badgeBg: 'linear-gradient(135deg, #ffe066 0%, #facc15 100%)',
-          glow: '0 0 35px rgba(250, 204, 21, 0.45)',
-          badgeColor: '#422006'
-        });
-      }
-      
-      if (top3[2]) {
-        podiumOrder.push({
-          item: top3[2],
-          rank: 3,
-          height: '100px',
-          gradient: 'linear-gradient(180deg, rgba(217, 119, 6, 0.45) 0%, rgba(180, 83, 9, 0.1) 100%)',
-          borderColor: '#d97706',
-          badgeBg: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
-          glow: '0 0 25px rgba(217, 119, 6, 0.3)',
-          badgeColor: '#fff'
-        });
+      var order = [1, 0, 2];
+      var heights = ['130px', '170px', '100px'];
+      var colors = ['#00d9ff', '#ecc94b', '#a855f7'];
+
+      order.forEach(function(idxPos) {
+        if (!top3[idxPos]) return;
+        var item = top3[idxPos];
+        var div = document.createElement('div');
+        div.style.cssText = 'width: 28%; display: flex; flex-direction: column; align-items: center; text-align: center;';
+        
+        div.innerHTML = '<div style="font-weight: 800; font-size: 13px; margin-bottom: 4px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">' + item.name + '</div>' +
+                        '<div style="font-weight: 700; font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">' + item.score + ' Slots</div>' +
+                        '<div style="width: 100%; height: ' + heights[idxPos] + '; background: linear-gradient(180deg, ' + colors[idxPos] + ' 0%, rgba(10, 19, 34, 0.8) 100%); border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #fff; box-shadow: 0 0 20px ' + colors[idxPos] + '40;">' + (idxPos + 1) + '</div>';
+        pod.appendChild(div);
+      });
+    }
+
+    function animateValue(id, start, end, duration) {
+      var obj = document.getElementById(id);
+      if (!obj) return;
+      var range = end - start;
+      var minTimer = 50;
+      var stepTime = Math.abs(Math.floor(duration / (range || 1)));
+      stepTime = Math.max(stepTime, minTimer);
+      var startTime = new Date().getTime();
+      var endTime = startTime + duration;
+      var timer;
+
+      function run() {
+        var now = new Date().getTime();
+        var remaining = Math.max((endTime - now) / duration, 0);
+        var value = Math.round(end - (remaining * range));
+        obj.innerHTML = value;
+        if (value == end) clearInterval(timer);
       }
 
-      podiumOrder.forEach(function(p) {
-        var card = document.createElement('div');
-        card.style.cssText = 'display:flex; flex-direction:column; align-items:center; width: 120px; transition: transform 0.3s ease;';
-        card.innerHTML = `
-          <div style="background:${p.badgeBg}; color:${p.badgeColor}; font-weight:800; font-size:13px; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:8px; box-shadow: ${p.glow}; border: 1.5px solid rgba(255,255,255,0.5);">
-            ${p.rank}
-          </div>
-          <div style="font-weight:800; font-size:14px; color:#fff; text-align:center; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:100%; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">${p.item.name}</div>
-          <div style="font-size:11px; font-weight:700; color:${p.borderColor}; margin-bottom:10px; text-shadow: 0 0 10px ${p.borderColor};">${p.item.score} Slots</div>
-          <div style="width:100%; height:${p.height}; background:${p.gradient}; border:2px solid ${p.borderColor}; border-bottom:none; border-radius:16px 16px 0 0; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:26px; color:#fff; backdrop-filter: blur(12px); box-shadow: ${p.glow}; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
-            ${p.rank}
-          </div>
-        `;
-        podium.appendChild(card);
+      timer = setInterval(run, stepTime);
+      run();
+    }
+
+    function setupSearchInput() {
+      var input = document.getElementById('searchInput');
+      var menu = document.getElementById('dropdownMenu');
+
+      input.addEventListener('input', function() {
+        clearTimeout(searchDebounceTimer);
+        var query = input.value.trim().toLowerCase();
+        
+        if (query.length === 0) {
+          menu.style.display = 'none';
+          return;
+        }
+
+        searchDebounceTimer = setTimeout(function() {
+          var results = localDatabase.filter(function(item) {
+            return (item.accountName && item.accountName.toLowerCase().includes(query)) ||
+                   (item.phone && item.phone.toString().includes(query));
+          });
+
+          if (results.length === 0) {
+            menu.innerHTML = '<div style="padding:15px; text-align:center; color:var(--text-muted);">No results found</div>';
+          } else {
+            menu.innerHTML = results.map(function(res) {
+              return '<div class="dropdown-item">' +
+                       '<div>' +
+                         '<div style="font-weight:800; color:#fff;">' + res.accountName + '</div>' +
+                         '<div style="font-size:12px; color:var(--text-muted);">' + (res.phone || 'No phone') + ' • ' + (res.team || '') + '</div>' +
+                       '</div>' +
+                     '</div>';
+            }).join('');
+          }
+          menu.style.display = 'block';
+        }, 200);
       });
 
-      list.forEach(function(m, idx) {
-        var row = document.createElement('tr');
-        var selectedColor = '#00d9ff';
-        if (currentFilter === 'iGV') selectedColor = '#f85a40';
-        else if (currentFilter === 'iGTa') selectedColor = '#00c16e';
-        else if (currentFilter === 'iGTe') selectedColor = '#f48924';
-
-        row.style.cssText = 'border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s ease;';
-        row.innerHTML = `
-          <td style="padding:14px; font-weight:800; color:${idx === 0 ? '#facc15' : idx === 1 ? '#e2e8f0' : idx === 2 ? '#d97706' : '#fff'};">#${idx + 1}</td>
-          <td style="padding:14px; font-weight:700;">${m.name}</td>
-          <td style="padding:14px; color:var(--text-muted);">${m.team}</td>
-          <td style="padding:14px; color:var(--text-muted);">${m.func}</td>
-          <td style="padding:14px; color:#f85a40; font-weight:800;">${m.igv}</td>
-          <td style="padding:14px; color:#00c16e; font-weight:800;">${m.igta}</td>
-          <td style="padding:14px; color:#f48924; font-weight:800;">${m.igte}</td>
-          <td style="padding:14px; font-weight:900; color:${selectedColor}; text-shadow: 0 0 8px ${selectedColor}a1;">${m.score}</td>
-        `;
-        tbody.appendChild(row);
+      document.addEventListener('click', function(e) {
+        if (!input.contains(e.target) && !menu.contains(e.target)) {
+          menu.style.display = 'none';
+        }
       });
     }
 
     function scrollToSection(id) {
-      var element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    document.getElementById('searchInput').addEventListener('input', function() {
-      var query = this.value;
-      clearTimeout(searchDebounceTimer);
-      searchDebounceTimer = setTimeout(function() {
-        performSearch(query);
-      }, 150);
-    });
-
-    function performSearch(rawQuery) {
-      var query = rawQuery.toLowerCase().trim();
-      var cleanQuery = query.replace(/\D/g, '');
-      var dropdown = document.getElementById('dropdownMenu');
-
-      if (!query) {
-        dropdown.style.display = "none";
-        return;
-      }
-
-      var matches = localDatabase.filter(function(item) {
-        var nameMatch = item.accountName && item.accountName.toLowerCase().includes(query);
-        var phoneMatch = item.phone && item.phone.toLowerCase().includes(query);
-        var cleanMatch = cleanQuery !== "" && item.cleanPhone && item.cleanPhone.includes(cleanQuery);
-        return nameMatch || phoneMatch || cleanMatch;
-      });
-
-      dropdown.innerHTML = "";
-      dropdown.style.display = "block";
-
-      if (matches.length === 0) {
-        dropdown.innerHTML = "<div style='padding:15px; text-align:center; color:#10b981; font-size:13px;'>🟢 Account is Free / Available</div>";
-        return;
-      }
-
-      var limitMatches = matches.slice(0, 50);
-      var fragment = document.createDocumentFragment();
-
-      limitMatches.forEach(function(item) {
-        var respText = item.responsible && item.responsible !== "N/A" ? item.responsible : "Unassigned";
-        var row = document.createElement('div');
-        row.className = "dropdown-item";
-        row.innerHTML = `
-          <div>
-            <div style="color:#fff; font-weight:700; font-size:14px;">
-              <span class="material-symbols-outlined dropdown-icon" style="color:#00d9ff;">corporate_fare</span>
-              ${item.accountName || "Unnamed Account"}
-            </div>
-            <div style="color:var(--text-muted); font-size:12px; margin-top:3px;">
-              <span class="material-symbols-outlined dropdown-icon" style="color:#2eb85c;">call</span>
-              ${item.phone || "No Phone"}
-            </div>
-            <a href="${item.teamLink}" target="_blank" style="color:var(--accent-cyan); font-size:11px; text-decoration:none; display:inline-block; margin-top:4px;">🔗 Open Sheet</a>
-          </div>
-          <div style="text-align:right;">
-            <span style="background:var(--accent-gradient); color:#fff; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:700;">${item.team}</span>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;"> ${respText}</div>
-          </div>
-        `;
-        fragment.appendChild(row);
-      });
-
-      dropdown.appendChild(fragment);
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
-
-  <div style="text-align: center; margin: 30px 0 15px 0;">
-    <span style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 8px 18px; border-radius: 20px; font-size: 0.9rem; color: #f8fafc; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-      Designed with ❤️ by <span style="color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);">JEMY</span>
-    </span>
-  </div>
-
 </body>
 </html>
