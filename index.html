@@ -640,64 +640,90 @@
       fetchDashboardData();
     });
 
+    /* Safe Runner Wrapper to handle Google Apps Script or Fallback Mock Data */
+    function runGoogleScript(functionName, successCallback, failureCallback) {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        var runner = google.script.run.withSuccessHandler(successCallback);
+        if (failureCallback) runner = runner.withFailureHandler(failureCallback);
+        runner[functionName]();
+      } else {
+        // Fallback Mock Data for GitHub Pages
+        console.warn("Google Apps Script context not found. Using fallback data.");
+        setTimeout(function() {
+          if (functionName === 'getAllAccountsData') {
+            successCallback([
+              { accountName: "Sample Account 1", phone: "01000000001", cleanPhone: "01000000001", team: "Welad Rizk", responsible: "Member A", teamLink: "#" },
+              { accountName: "Sample Account 2", phone: "01000000002", cleanPhone: "01000000002", team: "El Kat3a", responsible: "Member B", teamLink: "#" }
+            ]);
+          } else if (functionName === 'getSheetLinks') {
+            successCallback({ welad: "#", kat3a: "#", stars: "#", starks: "#" });
+          } else if (functionName === 'getDashboardData') {
+            successCallback({
+              topAchiever: { name: "Ahmed Hassan", slots: 12 },
+              topTeam: { name: "Welad Rizk", slots: 35 },
+              topFunction: { name: "iGTa", slots: 28 },
+              members: [
+                { name: "Ahmed Hassan", team: "Welad Rizk", func: "iGTa", igv: 2, igta: 7, igte: 3, total: 12 },
+                { name: "Sarah Ali", team: "El Kat3a", func: "iGV", igv: 6, igta: 2, igte: 1, total: 9 },
+                { name: "Omar Khaled", team: "Starks", func: "iGTe", igv: 1, igta: 2, igte: 5, total: 8 }
+              ]
+            });
+          }
+        }, 300);
+      }
+    }
+
     function fetchData() {
-      google.script.run
-        .withSuccessHandler(function(data) {
-          localDatabase = data || [];
-          var status = document.getElementById('statusText');
-          if (status) {
-            status.innerText = "READY (" + localDatabase.length + ")";
-            status.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
-          }
-        })
-        .withFailureHandler(function(err) {
-          console.error("Fetch failed:", err);
-          var status = document.getElementById('statusText');
-          if (status) {
-            status.innerText = "Error Loading";
-            status.style.background = "#ef4444";
-          }
-        })
-        .getAllAccountsData();
+      runGoogleScript('getAllAccountsData', function(data) {
+        localDatabase = data || [];
+        var status = document.getElementById('statusText');
+        if (status) {
+          status.innerText = "READY (" + localDatabase.length + ")";
+          status.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+        }
+      }, function(err) {
+        console.error("Fetch failed:", err);
+        var status = document.getElementById('statusText');
+        if (status) {
+          status.innerText = "Error Loading";
+          status.style.background = "#ef4444";
+        }
+      });
     }
 
     function fetchLinks() {
-      google.script.run
-        .withSuccessHandler(function(links) {
-          if (links) {
-            if (links.welad) document.getElementById('btn-welad').href = links.welad;
-            if (links.kat3a) document.getElementById('btn-kat3a').href = links.kat3a;
-            if (links.stars) document.getElementById('btn-stars').href = links.stars;
-            if (links.starks) document.getElementById('btn-starks').href = links.starks;
-          }
-        })
-        .getSheetLinks();
+      runGoogleScript('getSheetLinks', function(links) {
+        if (links) {
+          if (links.welad) document.getElementById('btn-welad').href = links.welad;
+          if (links.kat3a) document.getElementById('btn-kat3a').href = links.kat3a;
+          if (links.stars) document.getElementById('btn-stars').href = links.stars;
+          if (links.starks) document.getElementById('btn-starks').href = links.starks;
+        }
+      });
     }
 
     function fetchDashboardData() {
-      google.script.run
-        .withSuccessHandler(function(data) {
-          if (!data) return;
+      runGoogleScript('getDashboardData', function(data) {
+        if (!data) return;
 
-          if (data.topAchiever) {
-            document.getElementById('dashTopAchiever').innerText = data.topAchiever.name;
-            document.getElementById('dashTopAchieverSlots').innerText = data.topAchiever.slots + " Slots";
-          }
+        if (data.topAchiever) {
+          document.getElementById('dashTopAchiever').innerText = data.topAchiever.name;
+          document.getElementById('dashTopAchieverSlots').innerText = data.topAchiever.slots + " Slots";
+        }
 
-          if (data.topTeam) {
-            document.getElementById('dashTopTeam').innerText = data.topTeam.name;
-            document.getElementById('dashTopTeamSlots').innerText = data.topTeam.slots + " Total Slots";
-          }
+        if (data.topTeam) {
+          document.getElementById('dashTopTeam').innerText = data.topTeam.name;
+          document.getElementById('dashTopTeamSlots').innerText = data.topTeam.slots + " Total Slots";
+        }
 
-          if (data.topFunction) {
-            document.getElementById('dashTopFunc').innerText = data.topFunction.name;
-            document.getElementById('dashTopFuncSlots').innerText = data.topFunction.slots + " Total Slots";
-          }
+        if (data.topFunction) {
+          document.getElementById('dashTopFunc').innerText = data.topFunction.name;
+          document.getElementById('dashTopFuncSlots').innerText = data.topFunction.slots + " Total Slots";
+        }
 
-          rawMembersData = data.members || [];
-          applyLeaderboardFilter();
-        })
-        .getDashboardData();
+        rawMembersData = data.members || [];
+        applyLeaderboardFilter();
+      });
     }
 
     /* Custom Dropdown Functions */
