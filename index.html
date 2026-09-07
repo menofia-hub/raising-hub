@@ -35,52 +35,129 @@
     a, button, input, select, .brand-logo, .neon-card, .custom-dropdown-btn, .custom-dropdown-opt, .floating-total-badge { cursor: none !important; }
 
     .custom-cursor-dot {
-      width: 8px; height: 8px; background-color: var(--accent-cyan);
-      border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none;
-      z-index: 99999; transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-cyan);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
       box-shadow: 0 0 10px var(--accent-cyan), 0 0 20px var(--accent-cyan);
       transition: width 0.2s, height 0.2s, background-color 0.2s;
     }
 
     .custom-cursor-follower {
-      width: 36px; height: 36px; border: 1.5px solid rgba(0, 217, 255, 0.6);
-      border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none;
-      z-index: 99998; transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(0, 217, 255, 0.6);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
       transition: transform 0.1s ease-out, width 0.25s, height 0.25s, border-color 0.25s, background-color 0.25s;
     }
 
-    body.cursor-hover .custom-cursor-dot { width: 12px; height: 12px; background-color: #ffffff; box-shadow: 0 0 15px #ffffff; }
-    body.cursor-hover .custom-cursor-follower { width: 55px; height: 55px; border-color: var(--accent-cyan); background: rgba(0, 217, 255, 0.12); backdrop-filter: blur(2px); }
+    body.cursor-hover .custom-cursor-dot {
+      width: 12px;
+      height: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 0 15px #ffffff;
+    }
+
+    body.cursor-hover .custom-cursor-follower {
+      width: 55px;
+      height: 55px;
+      border-color: var(--accent-cyan);
+      background: rgba(0, 217, 255, 0.12);
+      backdrop-filter: blur(2px);
+    }
 
     .floating-total-badge {
-      position: fixed; bottom: 25px; right: 25px; z-index: 9999;
-      display: flex; align-items: center; gap: 14px; background: rgba(10, 19, 34, 0.85);
-      border: 1.5px solid rgba(0, 217, 255, 0.5); padding: 10px 22px; border-radius: 50px;
-      backdrop-filter: blur(20px); box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 217, 255, 0.25);
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(10, 19, 34, 0.85);
+      border: 1.5px solid rgba(0, 217, 255, 0.5);
+      padding: 10px 22px;
+      border-radius: 50px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 217, 255, 0.25);
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .floating-total-badge:hover { transform: translateY(-4px) scale(1.04); border-color: var(--accent-cyan); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 217, 255, 0.45); }
-    .floating-icon-box { width: 40px; height: 40px; background: rgba(0, 217, 255, 0.15); border: 1px solid rgba(0, 217, 255, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-cyan); }
+    .floating-total-badge:hover {
+      transform: translateY(-4px) scale(1.04);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 217, 255, 0.45);
+    }
+    .floating-icon-box {
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 217, 255, 0.15);
+      border: 1px solid rgba(0, 217, 255, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-cyan);
+    }
     .floating-info { display: flex; flex-direction: column; line-height: 1.1; }
     .floating-label { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; }
-    .floating-value { font-size: 22px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .floating-value {
+      font-size: 22px;
+      font-weight: 900;
+      background: linear-gradient(180deg, #ffffff, #00d9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
     header {
-      position: sticky; top: 0; z-index: 1000; padding: 18px 60px;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(5, 11, 20, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--card-border); box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 18px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 11, 20, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
     }
 
     .brand-logo { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
     .brand-logo::before { content: '✦'; color: var(--accent-cyan); }
 
-    .nav-pill-container { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--card-border); padding: 6px 20px; border-radius: 40px; backdrop-filter: blur(12px); }
+    .nav-pill-container {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      padding: 6px 20px;
+      border-radius: 40px;
+      backdrop-filter: blur(12px);
+    }
+
     .nav-links { display: flex; gap: 24px; list-style: none; }
     .nav-links a { color: #fff; text-decoration: none; font-size: 14px; font-weight: 500; opacity: 0.8; transition: opacity 0.2s; }
     .nav-links a:hover { opacity: 1; color: var(--accent-cyan); }
 
-    .status-btn { background: var(--accent-gradient); color: #ffffff; padding: 10px 22px; border-radius: 30px; font-weight: 700; font-size: 13px; border: none; box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+    .status-btn {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+    }
 
     .hero-search-section { padding: 90px 20px 60px 20px; text-align: center; max-width: 800px; margin: 0 auto; }
     .hero-title { font-size: 46px; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; text-shadow: 0 5px 20px rgba(0,0,0,0.8); }
@@ -89,28 +166,49 @@
 
     .search-box-wrapper { position: relative; width: 100%; max-width: 600px; margin: 0 auto; }
     .search-input {
-      width: 100%; padding: 20px 28px; background: rgba(5, 11, 20, 0.65);
-      backdrop-filter: blur(15px); border: 1.5px solid var(--accent-blue);
-      border-radius: 40px; color: #fff; font-size: 16px; outline: none;
-      box-shadow: 0 0 30px rgba(0, 102, 255, 0.3); transition: all 0.3s ease;
+      width: 100%;
+      padding: 20px 28px;
+      background: rgba(5, 11, 20, 0.65);
+      backdrop-filter: blur(15px);
+      border: 1.5px solid var(--accent-blue);
+      border-radius: 40px;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 0 30px rgba(0, 102, 255, 0.3);
+      transition: all 0.3s ease;
     }
     .search-input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 40px rgba(0, 217, 255, 0.5); }
 
     .podio-dropdown {
       position: absolute; top: 70px; left: 0; width: 100%;
-      background: rgba(9, 19, 34, 0.95); backdrop-filter: blur(20px);
-      border: 1px solid var(--accent-cyan); border-radius: 20px;
-      max-height: 380px; overflow-y: auto; z-index: 100; display: none;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9); text-align: left;
+      background: rgba(9, 19, 34, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 20px; max-height: 380px; overflow-y: auto;
+      z-index: 100; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.9); text-align: left;
     }
     .dropdown-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
 
-    .highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
     .database-section { padding: 60px; border-top: 1px solid var(--card-border); background: rgba(5, 11, 20, 0.4); backdrop-filter: blur(10px); }
     .section-head-title { font-size: 26px; font-weight: 800; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
 
     .team-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .neon-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--card-border); border-radius: 20px; padding: 18px; transition: all 0.3s ease; }
+    .neon-card { 
+      background: var(--card-bg); 
+      backdrop-filter: blur(15px); 
+      border: 1px solid var(--card-border); 
+      border-radius: 20px; 
+      padding: 18px; 
+      transition: all 0.3s ease; 
+    }
     .neon-card:hover { border-color: var(--accent-cyan); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 217, 255, 0.25); }
     .neon-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 14px; margin-bottom: 15px; }
     .neon-card .card-title { font-size: 16px; font-weight: 800; text-align: center; }
@@ -118,7 +216,9 @@
     .team-sheets-section { margin-top: 40px; }
     .team-sheets-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
     .sheet-btn {
-      background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--card-border);
+      background: var(--card-bg); 
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--card-border);
       padding: 16px 20px; border-radius: 16px; color: #fff; text-decoration: none;
       display: flex; justify-content: space-between; align-items: center;
       font-weight: 700; font-size: 14px; transition: all 0.3s ease;
@@ -127,26 +227,73 @@
 
     .custom-footer-section { padding: 60px; border-top: 1px solid var(--card-border); background: rgba(5, 11, 20, 0.4); backdrop-filter: blur(10px); }
 
-    .material-symbols-outlined { font-size: 28px; font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48; vertical-align: middle; }
-    .aiesec-prog-logo { height: 18px; width: auto; vertical-align: middle; margin-right: 6px; display: inline-block; object-fit: contain; }
+    .material-symbols-outlined {
+      font-size: 28px;
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48;
+      vertical-align: middle;
+    }
 
-    .custom-dropdown-container { position: relative; display: inline-block; }
+    .aiesec-prog-logo {
+      height: 18px;
+      width: auto;
+      vertical-align: middle;
+      margin-right: 6px;
+      display: inline-block;
+      object-fit: contain;
+    }
+
+    .custom-dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
     .custom-dropdown-btn {
-      background: rgba(10, 19, 34, 0.9); color: #fff; border: 1.5px solid var(--accent-cyan);
-      padding: 10px 18px; border-radius: 14px; font-weight: 700; font-size: 13px; outline: none;
-      backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
-      display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;
+      background: rgba(10, 19, 34, 0.9);
+      color: #fff;
+      border: 1.5px solid var(--accent-cyan);
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 13px;
+      outline: none;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
     }
 
     .custom-dropdown-menu {
-      display: none; position: absolute; right: 0; top: 48px;
-      background: rgba(10, 19, 34, 0.95); border: 1.5px solid var(--accent-cyan);
-      border-radius: 14px; backdrop-filter: blur(15px); min-width: 210px; z-index: 1000;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.8); overflow: hidden;
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 48px;
+      background: rgba(10, 19, 34, 0.95);
+      border: 1.5px solid var(--accent-cyan);
+      border-radius: 14px;
+      backdrop-filter: blur(15px);
+      min-width: 210px;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      overflow: hidden;
     }
 
-    .custom-dropdown-opt { padding: 12px 16px; font-weight: 700; font-size: 13px; color: #fff; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s ease; }
-    .custom-dropdown-opt:hover { background: rgba(0, 217, 255, 0.15); }
+    .custom-dropdown-opt {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.2s ease;
+    }
+
+    .custom-dropdown-opt:hover {
+      background: rgba(0, 217, 255, 0.15);
+    }
 
     @media (max-width: 1024px) {
       .team-cards-grid, .team-sheets-grid, .highlights-grid { grid-template-columns: repeat(1, 1fr); }
@@ -208,6 +355,7 @@
   </section>
 
   <section id="leaderboardSection" style="max-width: 1000px; margin: 40px auto 60px auto; padding: 0 20px;">
+    
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
       <h2 style="color: #fff; font-size: 26px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 10px;">
         <span class="material-symbols-outlined" style="color: var(--accent-cyan); font-size: 32px;">insert_chart</span>
@@ -220,10 +368,18 @@
           <span style="font-size: 10px; margin-left: 4px;">▼</span>
         </button>
         <div id="customFilterMenu" class="custom-dropdown-menu">
-          <div onclick="selectFilter('ALL', '🌐 ALL (Total Standings)')" class="custom-dropdown-opt">🌐 ALL (Total Standings)</div>
-          <div onclick="selectFilter('iGV', 'iGV Only', 'https://aiesec-logos.s3.eu-west-1.amazonaws.com/GV%20LOGO%20COLOR.png')" class="custom-dropdown-opt"><img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GV%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGV"> iGV Only</div>
-          <div onclick="selectFilter('iGTa', 'iGTa Only', 'https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTA%20LOGO%20COLOR.png')" class="custom-dropdown-opt"><img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTA%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTa"> iGTa Only</div>
-          <div onclick="selectFilter('iGTe', 'iGTe Only', 'https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTE%20LOGO%20COLOR.png')" class="custom-dropdown-opt" style="border:none;"><img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTE%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTe"> iGTe Only</div>
+          <div onclick="selectFilter('ALL', '🌐 ALL (Total Standings)')" class="custom-dropdown-opt">
+            🌐 ALL (Total Standings)
+          </div>
+          <div onclick="selectFilter('iGV', 'iGV Only', 'https://aiesec-logos.s3.eu-west-1.amazonaws.com/GV%20LOGO%20COLOR.png')" class="custom-dropdown-opt">
+            <img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GV%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGV"> iGV Only
+          </div>
+          <div onclick="selectFilter('iGTa', 'iGTa Only', 'https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTA%20LOGO%20COLOR.png')" class="custom-dropdown-opt">
+            <img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTA%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTa"> iGTa Only
+          </div>
+          <div onclick="selectFilter('iGTe', 'iGTe Only', 'https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTE%20LOGO%20COLOR.png')" class="custom-dropdown-opt" style="border:none;">
+            <img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTE%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTe"> iGTe Only
+          </div>
         </div>
       </div>
     </div>
@@ -263,9 +419,15 @@
               <th style="padding: 12px;">Member</th>
               <th style="padding: 12px;">Team</th>
               <th style="padding: 12px;">Function</th>
-              <th style="padding: 12px;"><img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GV%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGV"> iGV</th>
-              <th style="padding: 12px;"><img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTA%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTa"> iGTa</th>
-              <th style="padding: 12px;"><img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTE%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTe"> iGTe</th>
+              <th style="padding: 12px;">
+                <img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GV%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGV"> iGV
+              </th>
+              <th style="padding: 12px;">
+                <img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTA%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTa"> iGTa
+              </th>
+              <th style="padding: 12px;">
+                <img src="https://aiesec-logos.s3.eu-west-1.amazonaws.com/GTE%20LOGO%20COLOR.png" class="aiesec-prog-logo" alt="iGTe"> iGTe
+              </th>
               <th style="padding: 12px;">Selected Score</th>
             </tr>
           </thead>
@@ -275,6 +437,7 @@
         </table>
       </div>
     </div>
+
   </section>
 
   <section class="database-section" id="databaseSection">
@@ -301,10 +464,22 @@
     <div class="team-sheets-section">
       <div style="color:var(--text-muted); font-size:13px; font-weight:700; margin-bottom:10px;">OPEN GOOGLE SHEETS DIRECTLY</div>
       <div class="team-sheets-grid">
-        <a id="btn-welad" href="#" target="_blank" class="sheet-btn"><span>Welad Rizk Sheet</span><span>↗</span></a>
-        <a id="btn-kat3a" href="#" target="_blank" class="sheet-btn"><span>El Kat3a Sheet</span><span>↗</span></a>
-        <a id="btn-stars" href="#" target="_blank" class="sheet-btn"><span>El Five Stars Sheet</span><span>↗</span></a>
-        <a id="btn-starks" href="#" target="_blank" class="sheet-btn"><span>Starks Sheet</span><span>↗</span></a>
+        <a id="btn-welad" href="#" target="_blank" class="sheet-btn">
+          <span>Welad Rizk Sheet</span>
+          <span>↗</span>
+        </a>
+        <a id="btn-kat3a" href="#" target="_blank" class="sheet-btn">
+          <span>El Kat3a Sheet</span>
+          <span>↗</span>
+        </a>
+        <a id="btn-stars" href="#" target="_blank" class="sheet-btn">
+          <span>El Five Stars Sheet</span>
+          <span>↗</span>
+        </a>
+        <a id="btn-starks" href="#" target="_blank" class="sheet-btn">
+          <span>Starks Sheet</span>
+          <span>↗</span>
+        </a>
       </div>
     </div>
   </section>
@@ -359,8 +534,8 @@
   </section>
 
   <script>
-    // ⚠️ استبدل هذا الرابط برابط الـ Web App الخاص بك المأخوذ من Google Apps Script
-    const API_URL = "ضع_رابط_الـWEB_APP_الخاص_بك_هنا";
+    // ⚠️ استبدل هذا الرابط برابط الـ Deploy الخاص بك من Google Apps Script عند رفعه على GitHub Pages
+    var API_URL = "ضع_رابط_الـWEB_APP_الخاص_بك_هنا";
 
     var localDatabase = [];
     var rawMembersData = [];
@@ -401,49 +576,50 @@
       }
     });
 
+    // دالة الاتصال المزدوج الذكية (تعمل سواء على Apps Script أو GitHub Pages)
+    function callBackend(actionName, serverFnName, successCb, failCb) {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(successCb)
+          .withFailureHandler(failCb || console.error)
+          [serverFnName]();
+      } else if (API_URL && API_URL !== "https://script.google.com/macros/s/AKfycbzL5PIsJykSb3dF3ihinangnzb6QFl4VS3RE0ejshYZ_u5LdjjgcDCzICeIBDmGxeZO/exec") {
+        fetch(API_URL + "?action=" + actionName)
+          .then(function(res) { return res.json(); })
+          .then(successCb)
+          .catch(failCb || console.error);
+      } else {
+        if (failCb) failCb("API_URL is missing");
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', function() {
       fetchData();
       fetchLinks();
       fetchDashboardData();
     });
 
-    function apiCall(action, callback) {
-      var url = API_URL + "?action=" + action;
-      fetch(url, { redirect: "follow" })
-        .then(function(res) {
-          if (!res.ok) throw new Error("HTTP Status " + res.status);
-          return res.json();
-        })
-        .then(function(data) {
-          callback(null, data);
-        })
-        .catch(function(err) {
-          callback(err, null);
-        });
-    }
-
     function fetchData() {
-      apiCall("getAccounts", function(err, data) {
+      callBackend('getAccounts', 'getAllAccountsData', function(data) {
+        localDatabase = data || [];
         var status = document.getElementById('statusText');
-        if (!err && Array.isArray(data)) {
-          localDatabase = data;
-          if (status) {
-            status.innerText = "READY (" + localDatabase.length + ")";
-            status.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
-          }
-        } else {
-          console.error("Fetch failed:", err);
-          if (status) {
-            status.innerText = "Error Loading";
-            status.style.background = "#ef4444";
-          }
+        if (status) {
+          status.innerText = "READY (" + localDatabase.length + ")";
+          status.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+        }
+      }, function(err) {
+        console.error("Fetch failed:", err);
+        var status = document.getElementById('statusText');
+        if (status) {
+          status.innerText = "Error Loading";
+          status.style.background = "#ef4444";
         }
       });
     }
 
     function fetchLinks() {
-      apiCall("getLinks", function(err, links) {
-        if (!err && links) {
+      callBackend('getLinks', 'getSheetLinks', function(links) {
+        if (links) {
           if (links.welad) document.getElementById('btn-welad').href = links.welad;
           if (links.kat3a) document.getElementById('btn-kat3a').href = links.kat3a;
           if (links.stars) document.getElementById('btn-stars').href = links.stars;
@@ -453,23 +629,26 @@
     }
 
     function fetchDashboardData() {
-      apiCall("getDashboard", function(err, data) {
-        if (!err && data) {
-          if (data.topAchiever) {
-            document.getElementById('dashTopAchiever').innerText = data.topAchiever.name || "N/A";
-            document.getElementById('dashTopAchieverSlots').innerText = (data.topAchiever.slots || 0) + " Slots";
-          }
-          if (data.topTeam) {
-            document.getElementById('dashTopTeam').innerText = data.topTeam.name || "N/A";
-            document.getElementById('dashTopTeamSlots').innerText = (data.topTeam.slots || 0) + " Total Slots";
-          }
-          if (data.topFunction) {
-            document.getElementById('dashTopFunc').innerText = data.topFunction.name || "N/A";
-            document.getElementById('dashTopFuncSlots').innerText = (data.topFunction.slots || 0) + " Total Slots";
-          }
-          rawMembersData = data.members || [];
-          applyLeaderboardFilter();
+      callBackend('getDashboard', 'getDashboardData', function(data) {
+        if (!data) return;
+
+        if (data.topAchiever) {
+          document.getElementById('dashTopAchiever').innerText = data.topAchiever.name;
+          document.getElementById('dashTopAchieverSlots').innerText = data.topAchiever.slots + " Slots";
         }
+
+        if (data.topTeam) {
+          document.getElementById('dashTopTeam').innerText = data.topTeam.name;
+          document.getElementById('dashTopTeamSlots').innerText = data.topTeam.slots + " Total Slots";
+        }
+
+        if (data.topFunction) {
+          document.getElementById('dashTopFunc').innerText = data.topFunction.name;
+          document.getElementById('dashTopFuncSlots').innerText = data.topFunction.slots + " Total Slots";
+        }
+
+        rawMembersData = data.members || [];
+        applyLeaderboardFilter();
       });
     }
 
@@ -526,6 +705,7 @@
       }
 
       var grandTotalSlots = 0;
+
       var processed = rawMembersData.map(function(m) {
         var score = 0;
         if (filter === 'ALL') score = m.total;
@@ -542,8 +722,12 @@
       document.getElementById('floatFilterLabel').innerText = (filter === 'ALL') ? "TOTAL SLOTS" : filter + " SLOTS";
 
       processed.sort(function(a, b) {
-        if (b.score !== a.score) return b.score - a.score;
-        return (b.igta + b.igte) - (a.igta + a.igte);
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        var aGT = a.igta + a.igte;
+        var bGT = b.igta + b.igte;
+        return bGT - aGT;
       });
 
       if (processed[0]) {
@@ -565,28 +749,40 @@
       
       if (top3[1]) {
         podiumOrder.push({
-          item: top3[1], rank: 2, height: '130px',
+          item: top3[1],
+          rank: 2,
+          height: '130px',
           gradient: 'linear-gradient(180deg, rgba(226, 232, 240, 0.45) 0%, rgba(148, 163, 184, 0.1) 100%)',
-          borderColor: '#e2e8f0', badgeBg: 'linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)',
-          glow: '0 0 25px rgba(226, 232, 240, 0.3)', badgeColor: '#0f172a'
+          borderColor: '#e2e8f0',
+          badgeBg: 'linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)',
+          glow: '0 0 25px rgba(226, 232, 240, 0.3)',
+          badgeColor: '#0f172a'
         });
       }
       
       if (top3[0]) {
         podiumOrder.push({
-          item: top3[0], rank: 1, height: '175px',
+          item: top3[0],
+          rank: 1,
+          height: '175px',
           gradient: 'linear-gradient(180deg, rgba(250, 204, 21, 0.5) 0%, rgba(202, 138, 4, 0.1) 100%)',
-          borderColor: '#facc15', badgeBg: 'linear-gradient(135deg, #ffe066 0%, #facc15 100%)',
-          glow: '0 0 35px rgba(250, 204, 21, 0.45)', badgeColor: '#422006'
+          borderColor: '#facc15',
+          badgeBg: 'linear-gradient(135deg, #ffe066 0%, #facc15 100%)',
+          glow: '0 0 35px rgba(250, 204, 21, 0.45)',
+          badgeColor: '#422006'
         });
       }
       
       if (top3[2]) {
         podiumOrder.push({
-          item: top3[2], rank: 3, height: '100px',
+          item: top3[2],
+          rank: 3,
+          height: '100px',
           gradient: 'linear-gradient(180deg, rgba(217, 119, 6, 0.45) 0%, rgba(180, 83, 9, 0.1) 100%)',
-          borderColor: '#d97706', badgeBg: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
-          glow: '0 0 25px rgba(217, 119, 6, 0.3)', badgeColor: '#fff'
+          borderColor: '#d97706',
+          badgeBg: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
+          glow: '0 0 25px rgba(217, 119, 6, 0.3)',
+          badgeColor: '#fff'
         });
       }
 
